@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입 | 빛청모 월간지 WAVE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <a href="index.html">빛청모 월간지 <span class="logo-accent">WAVE</span></a>
+    </div>
+    <nav class="main-nav">
+      <a href="society.html">사회</a>
+      <a href="culture.html">문화</a>
+      <a href="interview.html">인터뷰</a>
+      <a href="essay.html">에세이</a>
+      <span class="auth-nav"></span>
+    </nav>
+  </div>
+</header>
+
+<main class="auth-page">
+  <div class="auth-card">
+    <h1 class="auth-title">회원가입</h1>
+    <p class="auth-desc">WAVE와 함께하려면 아래 정보를 입력해 주세요.</p>
+    <form id="signup-form" class="auth-form" novalidate>
+      <div class="form-group">
+        <label for="signup-email">이메일</label>
+        <input type="email" id="signup-email" name="email" required autocomplete="email" placeholder="example@email.com">
+      </div>
+      <div class="form-group">
+        <label for="signup-username">닉네임</label>
+        <input type="text" id="signup-username" name="username" required autocomplete="username" placeholder="닉네임">
+      </div>
+      <div class="form-group">
+        <label for="signup-password">비밀번호</label>
+        <input type="password" id="signup-password" name="password" required autocomplete="new-password" placeholder="4자 이상">
+      </div>
+      <div class="form-group">
+        <label for="signup-confirm">비밀번호 확인</label>
+        <input type="password" id="signup-confirm" name="confirm" required autocomplete="new-password" placeholder="비밀번호 다시 입력">
+      </div>
+      <div class="form-group agreement-group">
+        <div class="agreement-box">
+          <h4 class="agreement-title">개인정보 수집 및 이용 동의</h4>
+          <div class="agreement-preview">
+            빛청모 월간지 WAVE는 회원 가입을 위해 아래와 같이 개인정보를 수집·이용합니다. 동의를 거부할 권리가 있으며, 미동의 시 회원가입이 제한됩니다.
+          </div>
+          <details class="agreement-details">
+            <summary>전문 보기</summary>
+            <div class="agreement-full">
+              <p><strong>1. 수집 항목</strong><br>이메일, 닉네임, 비밀번호</p>
+              <p><strong>2. 수집·이용 목적</strong><br>회원 식별, 서비스 이용, 부정 이용 방지</p>
+              <p><strong>3. 보유·이용 기간</strong><br>회원 탈퇴 시까지 (관련 법령에 따라 보존할 필요가 있는 경우 해당 기간)</p>
+              <p><strong>4. 동의 거부 권리</strong><br>동의를 거부할 수 있으며, 거부 시 회원가입 및 서비스 이용이 제한됩니다.</p>
+            </div>
+          </details>
+          <label class="agreement-check">
+            <input type="checkbox" id="signup-agree" name="agree" required>
+            <span>개인정보 수집 및 이용에 동의합니다. (필수)</span>
+          </label>
+        </div>
+      </div>
+      <p class="form-error" id="signup-error" aria-live="polite"></p>
+      <button type="submit" class="btn-primary btn-block">가입하기</button>
+    </form>
+    <p class="auth-footer">
+      이미 계정이 있으신가요? <a href="login.html">로그인</a>
+    </p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">빛청모 월간지 <span class="logo-accent">WAVE</span></div>
+    <p class="footer-copy">© 2026 all rights reserved</p>
+  </div>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>
+(function() {
+  if (window.getCurrentUser()) {
+    location.href = 'index.html';
+    return;
+  }
+
+  var form = document.getElementById('signup-form');
+  var errorEl = document.getElementById('signup-error');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    errorEl.textContent = '';
+    var agree = document.getElementById('signup-agree');
+    if (!agree.checked) {
+      errorEl.textContent = '개인정보 수집 및 이용에 동의해 주세요.';
+      return;
+    }
+    var email = document.getElementById('signup-email').value;
+    var username = document.getElementById('signup-username').value;
+    var password = document.getElementById('signup-password').value;
+    var confirmPassword = document.getElementById('signup-confirm').value;
+    var result = window.authSignup(email, username, password, confirmPassword);
+    if (result === true) {
+      location.href = 'login.html?msg=signup';
+    } else {
+      errorEl.textContent = result;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

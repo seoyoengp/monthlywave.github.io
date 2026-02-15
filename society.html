@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>사회 | 빛청모 월간지 WAVE</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo"><a href="index.html">빛청모 월간지 <span>WAVE</span></a></div>
+  <nav>
+    <a href="society.html" class="active">사회</a>
+    <a href="culture.html">문화</a>
+    <a href="interview.html">인터뷰</a>
+    <a href="essay.html">에세이</a>
+    <span class="auth-nav"></span>
+  </nav>
+</header>
+
+<section class="page-banner">
+  <h1>사회</h1>
+  <p>사회 이슈와 청소년의 목소리</p>
+</section>
+
+<main class="content">
+  <section class="board-section category-board">
+    <h2 class="board-title">사회 게시판</h2>
+    <div class="board-list" id="board-list">
+      <div class="board-list-header without-category">
+        <span class="col-no">번호</span>
+        <span class="col-title">제목</span>
+        <span class="col-author">작성자</span>
+        <span class="col-date">날짜</span>
+      </div>
+      <div id="board-rows"></div>
+    </div>
+    <div class="empty-state" id="board-empty" style="display:none;">
+      <p class="empty-state-title">등록된 기사가 없습니다</p>
+      <p class="empty-state-desc">곧 새로운 콘텐츠가 올라올 예정입니다.</p>
+    </div>
+  </section>
+
+  <aside class="sidebar">
+    <h3>인기 기사</h3>
+    <ul class="sidebar-list" id="sidebar-popular"></ul>
+  </aside>
+</main>
+
+<script src="js/auth.js"></script>
+<script src="data/articles.js"></script>
+<script src="js/app.js"></script>
+<script>
+(function() {
+  var cat = 'society';
+  var list = window.getArticles().filter(function(a) { return a.category === cat; });
+  list = window.sortArticlesByDate(list);
+  var container = document.getElementById('board-rows');
+  var emptyEl = document.getElementById('board-empty');
+  var boardList = document.getElementById('board-list');
+  if (list.length) {
+    boardList.style.display = '';
+    emptyEl.style.display = 'none';
+    container.innerHTML = list.map(function(a, i) {
+      return '<a href="article.html?id=' + a.id + '&cat=' + cat + '" class="board-row">' +
+        '<span class="col-no">' + (i + 1) + '</span>' +
+        '<span class="col-title">' + (a.title || '') + '</span>' +
+        '<span class="col-author">' + (a.author || '') + '</span>' +
+        '<span class="col-date">' + (a.date || '') + '</span></a>';
+    }).join('');
+  } else {
+    boardList.style.display = 'none';
+    emptyEl.style.display = 'block';
+  }
+  var all = window.sortArticlesByDate(window.getArticles());
+  var sidebar = document.getElementById('sidebar-popular');
+  var popular = all.slice(0, 5);
+  sidebar.innerHTML = popular.length ? popular.map(function(a) {
+    return '<li><a href="article.html?id=' + a.id + '&cat=' + a.category + '">' + (a.title || '') + '</a></li>';
+  }).join('') : '<li class="sidebar-empty">등록된 기사가 없습니다</li>';
+})();
+</script>
+
+<footer>
+  <p>© 2026 빛청모 월간지 WAVE | all rights reserved</p>
+</footer>
+
+</body>
+</html>

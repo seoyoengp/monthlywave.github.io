@@ -1,0 +1,20 @@
+{
+  "name": "monthlywave",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "notion:fetch": "node scripts/fetch-notion.js",
+    "notion:diagnose": "node scripts/diagnose.js",
+    "notion:debug": "node scripts/debug-notion.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@notionhq/client": "^5.9.0",
+    "dotenv": "^17.3.1"
+  }
+}

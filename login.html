@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>로그인 | 빛청모 월간지 WAVE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <a href="index.html">빛청모 월간지 <span class="logo-accent">WAVE</span></a>
+    </div>
+    <nav class="main-nav">
+      <a href="society.html">사회</a>
+      <a href="culture.html">문화</a>
+      <a href="interview.html">인터뷰</a>
+      <a href="essay.html">에세이</a>
+      <span class="auth-nav"></span>
+    </nav>
+  </div>
+</header>
+
+<main class="auth-page">
+  <div class="auth-card">
+    <h1 class="auth-title">로그인</h1>
+    <p class="auth-desc">이메일 또는 닉네임과 비밀번호를 입력해 주세요.</p>
+    <p class="form-success" id="login-msg" aria-live="polite"></p>
+    <form id="login-form" class="auth-form" novalidate>
+      <div class="form-group">
+        <label for="login-id">이메일 또는 닉네임</label>
+        <input type="text" id="login-id" name="id" required autocomplete="username" placeholder="이메일 또는 닉네임">
+      </div>
+      <div class="form-group">
+        <label for="login-pw">비밀번호</label>
+        <input type="password" id="login-pw" name="password" required autocomplete="current-password" placeholder="비밀번호">
+      </div>
+      <p class="form-error" id="login-error" aria-live="polite"></p>
+      <button type="submit" class="btn-primary btn-block">로그인</button>
+    </form>
+    <p class="auth-footer">
+      계정이 없으신가요? <a href="signup.html">회원가입</a>
+    </p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">빛청모 월간지 <span class="logo-accent">WAVE</span></div>
+    <p class="footer-copy">© 2026 all rights reserved</p>
+  </div>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>
+(function() {
+  if (window.getCurrentUser()) {
+    var returnUrl = new URLSearchParams(location.search).get('return') || 'index.html';
+    location.href = returnUrl;
+    return;
+  }
+
+  var msg = new URLSearchParams(location.search).get('msg');
+  if (msg === 'signup') {
+    document.getElementById('login-msg').textContent = '회원가입이 완료되었습니다. 로그인해 주세요.';
+    document.getElementById('login-msg').style.display = 'block';
+  }
+
+  var form = document.getElementById('login-form');
+  var errorEl = document.getElementById('login-error');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    errorEl.textContent = '';
+    var id = document.getElementById('login-id').value;
+    var pw = document.getElementById('login-pw').value;
+    var result = window.authLogin(id, pw);
+    if (result === true) {
+      var returnUrl = new URLSearchParams(location.search).get('return') || 'index.html';
+      location.href = returnUrl;
+    } else {
+      errorEl.textContent = result;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

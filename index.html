@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <title>빛청모 월간지 WAVE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="js/auth.js"></script>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <a href="index.html">빛청모 월간지 <span class="logo-accent">WAVE</span></a>
+      </div>
+      <nav class="main-nav">
+        <a href="society.html">사회</a>
+        <a href="culture.html">문화</a>
+        <a href="interview.html">인터뷰</a>
+        <a href="essay.html">에세이</a>
+        <span class="auth-nav"></span>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero-banner">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-slogan">읽고 쓰고, 파도를 만들다.</p>
+      <p class="hero-intro">세상을 바라보는 청소년의 시선을 담습니다. WAVE와 함께 이달의 이야기를 만나보세요.</p>
+    </div>
+    <div class="hero-wave" aria-hidden="true"></div>
+  </section>
+
+  <main class="content">
+    <div class="content-inner">
+      <section class="posts-section">
+        <h2 class="section-heading">
+          <span class="section-heading-text">최신 기사</span>
+          <span class="section-heading-line"></span>
+        </h2>
+        <div class="posts-grid" id="posts-grid">
+          <!-- 동적 렌더링: js/app.js + data/articles.js -->
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <h3 class="sidebar-title">
+            <span class="sidebar-title-icon"></span>
+            인기 기사
+          </h3>
+          <ul class="sidebar-list" id="sidebar-popular">
+            <!-- 동적 렌더링 -->
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script src="data/articles.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    (function () {
+      var list = window.sortArticlesByDate(window.getArticles());
+      var grid = document.getElementById('posts-grid');
+      var sidebar = document.getElementById('sidebar-popular');
+
+      grid.innerHTML = list.map(function (a, i) {
+        var label = window.getCategoryLabel(a.category);
+        var cardClass = 'post-card' + (i === 0 ? ' post-card--featured' : '');
+        return '<a href="article.html?id=' + a.id + '&cat=' + a.category + '" class="' + cardClass + '">' +
+          '<span class="post-card-category">' + label + '</span>' +
+          '<h3 class="post-card-title">' + (a.title || '') + '</h3>' +
+          '<p class="post-card-meta">' + (a.author || '') + ' · ' + (a.date || '') + '</p>' +
+          '</a>';
+      }).join('');
+
+      var popular = list.slice(0, 5);
+      if (popular.length) {
+        sidebar.innerHTML = popular.map(function (a) {
+          return '<li><a href="article.html?id=' + a.id + '&cat=' + a.category + '">' + (a.title || '') + '</a></li>';
+        }).join('');
+      } else {
+        sidebar.innerHTML = '<li class="sidebar-empty">등록된 기사가 없습니다</li>';
+      }
+    })();
+  </script>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">빛청모 월간지 <span class="logo-accent">WAVE</span></div>
+      <p class="footer-copy">© 2026 all rights reserved</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>

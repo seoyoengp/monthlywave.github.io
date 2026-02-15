@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>기사 | 빛청모 월간지 WAVE</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo"><a href="index.html">빛청모 월간지 <span>WAVE</span></a></div>
+  <nav>
+    <a href="society.html">사회</a>
+    <a href="culture.html">문화</a>
+    <a href="interview.html">인터뷰</a>
+    <a href="essay.html">에세이</a>
+    <span class="auth-nav"></span>
+  </nav>
+</header>
+
+<main class="article-wrap">
+  <article class="article-detail" id="article-content">
+    <p class="article-loading">기사를 불러오는 중...</p>
+  </article>
+  <div class="article-engagement" id="article-engagement" data-article-id="" style="display:none;">
+    <div class="engagement-like">
+      <button type="button" id="engagement-like-btn" class="btn-like" aria-label="좋아요">
+        <span class="btn-like-icon">♥</span>
+        <span id="engagement-like-count">0</span>
+      </button>
+      <p class="engagement-like-hint" id="engagement-like-hint">로그인한 회원만 좋아요를 누를 수 있습니다.</p>
+    </div>
+    <section class="engagement-comments">
+      <h3 class="comments-title">댓글 <span id="engagement-comments-count">0</span></h3>
+      <ul class="comments-list" id="engagement-comments-list"></ul>
+      <p class="comments-empty" id="engagement-comments-empty">아직 댓글이 없습니다.</p>
+      <p class="comments-login-hint" id="engagement-comments-login-hint">로그인한 회원만 댓글을 남길 수 있습니다.</p>
+      <div class="comment-form-wrap" id="engagement-comment-form-wrap" style="display:none;">
+        <form id="engagement-comment-form" class="comment-form">
+          <textarea id="engagement-comment-body" class="comment-textarea" placeholder="댓글을 입력하세요." rows="3"></textarea>
+          <p class="form-error" id="engagement-comment-error"></p>
+          <button type="submit" class="btn-primary">댓글 등록</button>
+        </form>
+      </div>
+    </section>
+  </div>
+  <div class="article-actions">
+    <a href="#" class="btn-list" id="btn-list">목록으로</a>
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 빛청모 월간지 WAVE | all rights reserved</p>
+</footer>
+
+<script src="js/auth.js"></script>
+<script src="data/articles.js"></script>
+<script src="js/app.js"></script>
+<script src="js/engagement.js"></script>
+<script>
+(function() {
+  var params = new URLSearchParams(location.search);
+  var id = params.get('id') || '1';
+  var cat = params.get('cat') || 'society';
+
+  var article = window.findArticleById(id);
+  var listUrl = window.getCategoryPage(cat);
+
+  document.getElementById('btn-list').href = listUrl;
+
+  var container = document.getElementById('article-content');
+  if (article) {
+    var label = window.getCategoryLabel(article.category);
+    var viewsStr = (article.views != null) ? ' | 조회 ' + article.views.toLocaleString() : '';
+    container.innerHTML =
+      '<span class="article-category">' + label + '</span>' +
+      '<h1 class="article-heading">' + article.title + '</h1>' +
+      '<div class="article-meta">' + article.author + ' | ' + article.date + viewsStr + '</div>' +
+      '<div class="article-body">' + (article.body || '') + '</div>';
+    document.title = article.title + ' | 빛청모 월간지 WAVE';
+
+    var engagementEl = document.getElementById('article-engagement');
+    if (engagementEl) engagementEl.setAttribute('data-article-id', id);
+  } else {
+    container.innerHTML = '<p class="article-error">기사를 찾을 수 없습니다.</p>';
+  }
+})();
+</script>
+
+</body>
+</html>
